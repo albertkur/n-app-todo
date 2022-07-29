@@ -1,3 +1,8 @@
 <div class="file-system">
-    <div id="root"></div>
+    <!-- <div id="root"></div> -->
+    <el-tree :data="data().data" node-key="id" default-expand-all @node-drag-start="handleDragStart"
+        @node-drag-enter="handleDragEnter" @node-drag-leave="handleDragLeave" @node-drag-over="handleDragOver"
+        @node-drag-end="handleDragEnd" @node-drop="handleDrop" draggable :allow-drop="allowDrop"
+        :allow-drag="allowDrag">
+    </el-tree>
 </div>

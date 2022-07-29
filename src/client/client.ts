@@ -11,9 +11,12 @@ import { MockTodoService } from "../sdk/services/todo-service/mock-todo-service"
 import { components } from "./components/components";
 import { LocalPaxManagementService } from "../sdk/services/pax-management-service/local-pax-management-service";
 
-console.log(Vue);
+// Element-UI stuff
+import * as Element from "element-ui"; // https://element.eleme.io/#/en-US/component
+// @ts-ignore
+import locale from "element-ui/lib/locale/lang/en";
 
-
+Vue.use(Element, { locale });
 class Installer implements ComponentInstaller
 {
     public install(registry: Registry): void
