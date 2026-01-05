@@ -4,7 +4,7 @@
     "description": "n app todo app",
     "type": "commonjs",
     "main": "src/server/server.js",
-    "packageManager": "yarn@4.5.0",
+    "packageManager": "yarn@4.11.0",
     "scripts": {
         "ts-lint": "eslint",
         "ts-compile-server": "tsc --build tsconfig.server.json",
