@@ -15,6 +15,7 @@ module.exports = defineConfig(
             "node_modules",
             "**/dist/",
             "**/*.d.ts",
+            ".yarn/**",
             "*.temp.ts",
             "**/*.js",
             "./engine/grpc/generated/*.ts"
