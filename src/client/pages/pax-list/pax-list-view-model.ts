@@ -141,7 +141,7 @@ export class PaxListViewModel extends PageViewModel
     {
         super.onEnter();
 
-        this._loadPaxes().catch();
+        this._loadPaxes().catch(e => console.log(e));
     }
 
 

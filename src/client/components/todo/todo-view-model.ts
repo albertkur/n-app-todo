@@ -8,14 +8,14 @@ import { Todo } from "../../../sdk/proxies/todo/todo";
 
 @template(require("./todo-view.html"))
 @element("todo") // Name of the element. This is what you put as the html tag inside other page/component's template
-@bind("value")  // The name of the properties that this component take (binds) using v-bind. example: `v-bind:value="todo"` 
+@bind({ "todo": "object" })  // The name of the properties that this component take (binds) using v-bind. example: `v-bind:value="todo"` 
 @inject("NavigationService") // dependency
 export class TodoViewModel extends ComponentViewModel
 {
     private readonly _navigationService: NavigationService;
 
 
-    public get todo(): Todo { return this.getBound<Todo>("value"); } // getting the bound value in the VM.
+    public get todoValue(): Todo { return this.getBound<Todo>("todo"); } // getting the bound value in the VM.
 
 
     public constructor(navigationService: NavigationService)
@@ -31,8 +31,9 @@ export class TodoViewModel extends ComponentViewModel
     {
         try
         {
-            await this.todo.complete();
-        } catch (e)
+            await this.todoValue.complete();
+        }
+        catch (e)
         {
             console.log(e);
         }
@@ -40,15 +41,16 @@ export class TodoViewModel extends ComponentViewModel
 
     public editTodo(): void
     {
-        this._navigationService.navigate(Routes.manageTodo, { id: this.todo.id }); // navigating to a different page and, passing a path param to the route. 
+        this._navigationService.navigate(Routes.manageTodo, { id: this.todoValue.id }); // navigating to a different page and, passing a path param to the route. 
     }
 
     public async deleteTodo(): Promise<void>
     {
         try
         {
-            await this.todo.delete();
-        } catch (e)
+            await this.todoValue.delete();
+        }
+        catch (e)
         {
             console.log(e);
         }
@@ -58,19 +60,19 @@ export class TodoViewModel extends ComponentViewModel
      *  Life cycle methods for components are same as pages, but no onEnter and onLeave.
      */
 
-    protected override onCreate()
+    protected override onCreate(): void
     {
         super.onCreate();
         console.log("onCreate component");
     }
 
-    protected override onMount(e: HTMLElement)
+    protected override onMount(e: HTMLElement): void
     {
         super.onMount(e);
         console.log("onMount component");
     }
 
-    protected override onDestroy()
+    protected override onDestroy(): void
     {
         super.onDestroy();
         console.log("onDestroy component");

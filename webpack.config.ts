@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import "@nivinjoseph/n-ext";
-const path = require("path");
+import * as Path from "path";
 const autoprefixer = require("autoprefixer");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackTagsPlugin = require("html-webpack-tags-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -10,9 +12,10 @@ const CompressionPlugin = require("compression-webpack-plugin");
 import { ConfigurationManager } from "@nivinjoseph/n-config";
 const webpack = require("webpack");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
+import * as Zlib from "zlib";
 
 
-const env = ConfigurationManager.getConfig<string>("env");
+const env = ConfigurationManager.requireStringConfig("env");
 console.log("WEBPACK ENV", env);
 
 const isDev = env === "dev";
@@ -20,21 +23,12 @@ const isDev = env === "dev";
 const tsLoader = {
     loader: "ts-loader",
     options: {
-        configFile: "tsconfig.client.json",
-        transpileOnly: true
+        configFile: Path.resolve(__dirname, "tsconfig.client.json"),
+        transpileOnly: true,
+        compilerOptions: { skipLibCheck: true, sourceMap: true, inlineSourceMap: false, declarationMap: false }
     }
 };
 
-const tsLintLoader = {
-    loader: "tslint-loader",
-    options: {
-        configFile: "tslint.json",
-        tsConfigFile: "tsconfig.client.json",
-        // typeCheck: true, // this is a performance hog
-        typeCheck: !isDev,
-        emitErrors: true
-    }
-};
 
 const moduleRules: Array<any> = [
     {
@@ -92,7 +86,7 @@ const moduleRules: Array<any> = [
         ]
     },
     {
-        test: /\.(png|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif|webp|svg)$/i,
         use: [
             {
                 loader: "url-loader",
@@ -100,8 +94,7 @@ const moduleRules: Array<any> = [
                     limit: 9000,
                     fallback: "file-loader",
                     esModule: false,
-                    // @ts-ignore
-                    name: (resourcePath: string, resourceQuery: string) =>
+                    name: (_resourcePath: string, _resourceQuery: string): string =>
                     {
                         // `resourcePath` - `/absolute/path/to/file.js`
                         // `resourceQuery` - `?foo=bar`
@@ -128,17 +121,6 @@ const moduleRules: Array<any> = [
         ]
     },
     {
-        test: /\.svg$/,
-        use: [
-            {
-                loader: "file-loader",
-                options: {
-                    esModule: false
-                }
-            }
-        ]
-    },
-    {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: [
             isDev ? "file-loader" : {
@@ -154,12 +136,6 @@ const moduleRules: Array<any> = [
         test: /\.ts$/,
         exclude: /node_modules/,
         use: [tsLoader]
-    },
-    {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        enforce: "pre",
-        use: [tsLintLoader]
     },
     {
         test: /-resolver\.ts$/,
@@ -182,30 +158,19 @@ const moduleRules: Array<any> = [
         ]
     },
     {
-        test: /\.taskworker\.ts$/,
-        use: [
-            {
-                loader: "worker-loader",
-                options: {
-                    esModule: false,
-                    filename: "[name].[contenthash].worker.js",
-                    chunkFilename: "[id].[contenthash].worker.js",
-                }
-            },
-            tsLoader
-        ]
-    },
-    {
         test: /-view\.html$/,
-        exclude: [path.resolve(__dirname, "src/server")],
+        exclude: [Path.resolve(__dirname, "src/server")],
         use: [
-            ...(isDev ? [] :
+            ...isDev ? [] :
                 [{
+                    loader: "@nivinjoseph/n-app/dist/loaders/view-ts-check-loader.js"
+                },
+                {
                     loader: "vue-loader/lib/loaders/templateLoader.js"
                 },
                 {
                     loader: "@nivinjoseph/n-app/dist/loaders/view-loader.js"
-                }]),
+                }],
             {
                 loader: "html-loader",
                 options: {
@@ -216,7 +181,7 @@ const moduleRules: Array<any> = [
     },
     {
         test: /-view\.html$/,
-        include: [path.resolve(__dirname, "src/server")],
+        include: [Path.resolve(__dirname, "src/server/controllers/app")],
         use: [
             {
                 loader: "html-loader",
@@ -232,7 +197,7 @@ const plugins = [
     new ForkTsCheckerWebpackPlugin({
         async: isDev,
         typescript: {
-            configFile: "tsconfig.client.json",
+            configFile: Path.resolve(__dirname, "tsconfig.client.json"),
             configOverwrite: {
                 compilerOptions: { skipLibCheck: true, sourceMap: true, inlineSourceMap: false, declarationMap: false }
             }
@@ -240,17 +205,32 @@ const plugins = [
     }),
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-        template: "src/server/controllers/index-view.html",
+        template: Path.resolve(__dirname, "src/server/controllers/index-view.html"),
         filename: "index-view.html",
-        // favicon: "src/client/images/logos/x-flat-favicon.ico",
+        // TODO: need favicon
+        // favicon: Path.resolve(__dirname, "../client-common/src/images/favicon-32x32.png"),
         hash: true,
         minify: false
+    }),
+    new HtmlWebpackTagsPlugin({
+        append: false,
+        usePublicPath: false,
+        tags: []
     }),
     new MiniCssExtractPlugin({}),
     new webpack.DefinePlugin({
         APP_CONFIG: JSON.stringify({})
     }),
-    new webpack.NormalModuleReplacementPlugin(/element-ui[\/\\]lib[\/\\]locale[\/\\]lang[\/\\]zh-CN/, "element-ui/lib/locale/lang/en"), // for element-ui
+    new webpack.ProvidePlugin({
+        $: "jquery",
+
+        ...Object.keys(require("tslib"))
+            .reduce<Record<string, Array<string>>>((acc, key) =>
+            {
+                acc[key] = ["tslib", key];
+                return acc;
+            }, {})
+    })
 ];
 
 if (isDev)
@@ -260,17 +240,6 @@ if (isDev)
     //     loader: "source-map-loader",
     //     enforce: "pre"
     // });
-
-    moduleRules.push({
-        test: /\.js$/,
-        include: [path.resolve(__dirname, "node_modules/pdfjs-dist/build/pdf.js")],
-        use: {
-            loader: "babel-loader",
-            options: {
-                presets: ["@babel/preset-env"]
-            }
-        }
-    });
 
     plugins.push(new webpack.WatchIgnorePlugin({
         paths: [/\.js$/, /\.d\.ts$/]
@@ -282,19 +251,13 @@ else
 {
     moduleRules.push({
         test: /\.js$/,
+        include: [
+            Path.resolve(__dirname, "src/client"),
+            Path.resolve(__dirname, "src/sdk")
+        ],
         use: {
             loader: "babel-loader",
             options: {
-                // presets: [["@babel/preset-env", {
-                //     debug: false,
-                //     targets: {
-                //         // browsers: ["> 1%", "Chrome >= 41"],
-                //         chrome: "41" // this is what googles web crawler uses
-                //     },
-                //     useBuiltIns: "entry",
-                //     forceAllTransforms: true,
-                //     modules: "commonjs"
-                // }]]
                 presets: ["@babel/preset-env"]
             }
         }
@@ -302,7 +265,13 @@ else
 
     plugins.push(...[
         new CompressionPlugin({
-            test: /\.(js|css|svg)$/
+            test: /\.(js|css|svg)$/,
+            algorithm: "brotliCompress",
+            compressionOptions: {
+                params: {
+                    [Zlib.constants.BROTLI_PARAM_QUALITY]: Zlib.constants.BROTLI_MAX_QUALITY
+                }
+            }
         })
     ]);
 }
@@ -312,12 +281,12 @@ module.exports = {
     mode: isDev ? "development" : "production",
     target: "web",
     entry: {
-        main: ["./src/client/client.ts", isDev ? "webpack-hot-middleware/client" : null].where(t => t != null)
+        main: [Path.resolve(__dirname, "src/client/client.ts"), isDev ? "webpack-hot-middleware/client" : null].where(t => t != null)
     },
     output: {
         filename: "[name].bundle.js",
         chunkFilename: "[name].bundle.js",
-        path: path.resolve(__dirname, "src/client/dist"),
+        path: Path.resolve(__dirname, "src/client/dist"),
         publicPath: "/"
     },
     devtool: isDev ? "source-map" : false,
@@ -351,9 +320,8 @@ module.exports = {
         extensions: [".ts", ".js"],
         symlinks: false,
         alias: {
-            // https://feathericons.com/
-            // feather: path.resolve(__dirname, "node_modules/feather-icons/dist/feather-sprite.svg"),
-            vue: isDev ? "@nivinjoseph/vue/dist/vue.js" : "@nivinjoseph/vue/dist/vue.runtime.common.prod.js"
+            vue: isDev ? "@nivinjoseph/vue/dist/vue.js" : "@nivinjoseph/vue/dist/vue.runtime.common.prod.js",
+            "tslib$": "tslib/tslib.es6.js"
         }
     }
 };

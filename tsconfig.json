@@ -2,10 +2,15 @@
     "compilerOptions": {
         "module": "commonjs",
         "target": "es2015",
+        "lib": [
+            "ES2021",
+            "DOM"
+        ],
+        "types": [],
         "strict": true,
         "strictNullChecks": true,
         "strictFunctionTypes": true,
-        "noImplicitThis": false,
+        "noImplicitThis": true,
         "noImplicitReturns": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
@@ -20,14 +25,11 @@
         "skipLibCheck": true,
         "importHelpers": true,
         "noEmitHelpers": true,
-        "resolveJsonModule": true,
         "noImplicitOverride": true,
-        "plugins": [
-            {
-                "name": "typescript-tslint-plugin",
-                "configFile": "./tslint.json",
-                "alwaysShowRuleFailuresAsWarnings": false
-            }
-        ]
+        "pretty": true,
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "esModuleInterop": true
     }
 }
