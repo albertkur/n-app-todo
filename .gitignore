@@ -121,3 +121,6 @@ test/**/*.map
 webpack.config.js
 webpack.config.js.map
 src/client/dist
+
+**/*.d.ts
+**/*.d.ts.map

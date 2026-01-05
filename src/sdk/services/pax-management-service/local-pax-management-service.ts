@@ -42,7 +42,7 @@ export class LocalPaxManagementService implements PaxManagementService
                 email: "aron@gmail.com",
                 phoneNumber: "1231231234",
                 requiresAssistance: false
-            },
+            }
         );
     }
 

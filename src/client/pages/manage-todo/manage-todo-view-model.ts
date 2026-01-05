@@ -31,8 +31,8 @@ export class ManageTodoViewModel extends PageViewModel
     public get description(): string { return this._description; }
     public set description(value: string) { this._description = value; }
 
-    public get hasErrors(): boolean { return !this.validate(); }
-    public get errors(): Object { return this._validator.errors; }
+    public get hasErrors(): boolean { return !this._validate(); }
+    public get errors(): object { return this._validator.errors; }
 
 
     public constructor(todoService: TodoService, navigationService: NavigationService)
@@ -47,14 +47,14 @@ export class ManageTodoViewModel extends PageViewModel
         this._todo = null;
         this._title = "";
         this._description = "";
-        this._validator = this.createValidator();
+        this._validator = this._createValidator();
     }
 
 
     public async save(): Promise<void>
     {
         this._validator.enable();
-        if (!this.validate())
+        if (!this._validate())
             return;
 
         try
@@ -63,13 +63,14 @@ export class ManageTodoViewModel extends PageViewModel
                 await this._todo.update(this._title, this._description);
             else
                 await this._todoService.createTodo(this._title, this._description);
-        } catch (e)
+        }
+        catch (e)
         {
             console.log(e);
             return;
         }
 
-        this._navigationService.navigate(Routes.listTodos);
+        this._navigationService.navigate(Routes.todos);
     }
 
 
@@ -96,13 +97,13 @@ export class ManageTodoViewModel extends PageViewModel
     }
 
 
-    private validate(): boolean
+    private _validate(): boolean
     {
         this._validator.validate(this);
         return this._validator.isValid;
     }
 
-    private createValidator(): Validator<this>
+    private _createValidator(): Validator<this>
     {
         const validator = new Validator<this>(true);
 

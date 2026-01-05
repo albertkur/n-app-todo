@@ -12,7 +12,7 @@ import { Logger } from "@nivinjoseph/n-log";
 export class IndexController extends Controller
 {
     private readonly _callContext: CallContext;
-    // @ts-ignore
+    // @ts-expect-error not used atm
     private readonly _logger: Logger;
 
 

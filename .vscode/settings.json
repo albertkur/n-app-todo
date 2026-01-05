@@ -12,13 +12,16 @@
         "**/*.js": {
             "when": "$(basename).ts"
         },
+        "**/*.d.ts": {
+            "when": "$(basename).ts"
+        },
         "**/*.map": {
             "when": "$(basename).map"
         },
         "**/*.css": {
             "when": "$(basename).scss"
         },
-        "**/tsconfig.tsbuildinfo": true
+        "**/*.tsbuildinfo": true
     },
     "editor.trimAutoWhitespace": false,
     "cSpell.userWords": [

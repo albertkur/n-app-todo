@@ -8,7 +8,7 @@ import "./pax-table-row-view.scss";
 @template(require("./pax-table-row-view.html"))
 @element("pax-table-row")
 @events("managePax", "deletePax")
-@bind("selectablePax")
+@bind({ "selectablePax": "object" })
 export class PaxTableRowViewModel extends ComponentViewModel
 {
     private get _selectablePax(): SelectablePax { return this.getBound("selectablePax"); }
@@ -33,6 +33,7 @@ export class PaxTableRowViewModel extends ComponentViewModel
 
     protected override onCreate(): void
     {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         given(this, "this").ensure(t => t._selectablePax != null, "No pax bound");
     }
 }

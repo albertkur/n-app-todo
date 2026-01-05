@@ -8,15 +8,15 @@ import { Routes } from "../routes";
 
 
 @template(require("./list-todos-view.html")) // path to the template
-@route(Routes.listTodos) // route that the page is going to be shown at
+@route(Routes.todos) // route that the page is going to be shown at
 @inject("TodoService") //  dependency for this VM, this gets injected in the constructor, these dependencies are installed in client.ts
 export class ListTodosViewModel extends PageViewModel
 {
     private readonly _todoService: TodoService;
-    private _todos: ReadonlyArray<Todo>;
+    private _todos: ReadonlyArray<Todo> = [];
 
 
-    public get todos(): ReadonlyArray<Todo> { return this._todos?.where(t => !t.isDeleted) ?? []; } // getters used to reveal VM properties to the template
+    public get todos(): ReadonlyArray<Todo> { return this._todos.where(t => !t.isDeleted); } // getters used to reveal VM properties to the template
 
 
     public constructor(todoService: TodoService) // dependency getting injected
@@ -32,13 +32,13 @@ export class ListTodosViewModel extends PageViewModel
      * Life cycle methods for pages, in order of when they are called.
      */
 
-    protected override onCreate()
+    protected override onCreate(): void
     {
         super.onCreate();
         console.log("on Create, when the Vm is created, but the template has not been mounted in the DOM.");
     }
 
-    protected override onMount(element: HTMLElement)
+    protected override onMount(element: HTMLElement): void
     {
         super.onMount(element);
         console.log("onMount, when the page template is mounted on the DOM, you get the HTML element as a parameter here to manipulate it, like using Jquery for example.");
@@ -53,13 +53,13 @@ export class ListTodosViewModel extends PageViewModel
             .catch(e => console.log(e));
     }
 
-    protected override onLeave()
+    protected override onLeave(): void
     {
         super.onLeave();
         console.log("onLeave, when the user is about to leave the page.");
     }
 
-    protected override onDestroy()
+    protected override onDestroy(): void
     {
         super.onDestroy();
         console.log("onDestroy, when the page is removed from the DOM.");

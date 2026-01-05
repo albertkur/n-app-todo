@@ -28,7 +28,7 @@ export class ManagePaxViewModel extends PageViewModel
     public get isNewPax(): boolean { return this._pax?.id == null; }
 
     public get hasErrors(): boolean { return !this._validate(); }
-    public get errors(): Object { return this._validator.errors; }
+    public get errors(): object { return this._validator.errors; }
 
 
     public constructor(paxManagementService: PaxManagementService, dialogService: DialogService,

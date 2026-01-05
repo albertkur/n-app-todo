@@ -7,7 +7,9 @@ import { given } from "@nivinjoseph/n-defensive";
 import { IndexController } from "./controllers/index-controller";
 
 
-const logger = new ConsoleLogger(LogDateTimeZone.est);
+const logger = new ConsoleLogger({
+    logDateTimeZone: LogDateTimeZone.local
+});
 
 class Installer implements ComponentInstaller
 {
@@ -24,7 +26,6 @@ class Installer implements ComponentInstaller
 const server = new WebApp(Number.parseInt(ConfigurationManager.getConfig<number>("PORT") as any), null);
 server
     .enableWebPackDevMiddleware()
-    .useLogger(logger)
     .useInstaller(new Installer())
     .registerStaticFilePath("src/client/dist", true)
     .registerControllers(IndexController);
