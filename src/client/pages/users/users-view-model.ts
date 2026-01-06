@@ -36,21 +36,23 @@ export class UsersViewModel extends PageViewModel
                 lastName: "User 3",
             });
 
-        console.log(this._users);
-
-
     }
 
 
-    public addUser(): void
+    public addUser(user: User): void
     {
+        this._users.push(user);
+    }
+    
+    public openModal(): void
+    {
+        // display the user modal form
         this._isModalDisplay = true;
-        console.log("add new user", this._isModalDisplay);
     }
 
-    public async closeModal(text: string): Promise<void>
+    public closeModal(): void
     {
-        console.log("close modal", text);
+        // close the user modal form
         this._isModalDisplay = false;
     }
 

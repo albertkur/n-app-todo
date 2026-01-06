@@ -5,7 +5,7 @@ import { User } from "../../../../../sdk/models/user";
 
 @template(require("./user-modal-form-view.html"))
 @element("user-modal-form")
-    @events("submit", "closeModal")
+@events("addUser", "closeModal")
     // @inject("")
 export class UserModalFormViewModel extends ComponentViewModel
 {
@@ -27,9 +27,9 @@ export class UserModalFormViewModel extends ComponentViewModel
 
     }
 
-    public submit(): void
+    public async submit(): Promise<void>
     {
-        console.log("Submit the form!", this.user);
+        this.emit("addUser", this.user);
     }
 
     public closeModal(): void

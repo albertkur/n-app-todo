@@ -1,9 +1,10 @@
-<div class="users-view">
+<div class="users-view p-5">
+    <h1 class="title">Users</h1>
     <nav class="level">
         <p class="control">
             <input class="input" type="text" placeholder="Search by name">
         </p>
-        <button class="button" @click="addUser">Add User</button>
+        <button class="button" @click="openModal">Add User</button>
     </nav>
     <div class="lists">
         <ul>
@@ -15,7 +16,7 @@
             </li>
         </ul>
     </div>
-    <user-modal-form v-if="isModalDisplay == true" @close-modal="closeModal">
+    <user-modal-form v-if="isModalDisplay == true" @close-modal="closeModal" @add-user="addUser">
 
     </user-modal-form>
 </div>
