@@ -1,0 +1,15 @@
+<div class="user-modal-form-view">
+    <h1>user form</h1>
+    <div class="form-controls">
+        <p class="label">first name</p>
+        <input type="text" name="first_name" id="first_name" class="input" v-model="user.firstName">
+    </div>
+    <div class="form-controls">
+        <p class="label">last name</p>
+        <input type="text" name="first_name" id="first_name" class="input" v-model="user.lastName">
+    </div>
+    <div class="main-action">
+        <button type="button" class="button" @click="closeModal">Cancel</button>
+        <button type="button" class="button" @click="submit">Submit</button>
+    </div>
+</div>

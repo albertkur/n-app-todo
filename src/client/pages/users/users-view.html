@@ -1,0 +1,21 @@
+<div class="users-view">
+    <nav class="level">
+        <p class="control">
+            <input class="input" type="text" placeholder="Search by name">
+        </p>
+        <button class="button" @click="addUser">Add User</button>
+    </nav>
+    <div class="lists">
+        <ul>
+            <li :key="user.id" v-for="user of getUsers">
+                <p><span class="label">First Name:</span> {{user.firstName}}</p>
+                <p><span class="label">
+                        Last Name:
+                    </span> {{user.lastName}}</p>
+            </li>
+        </ul>
+    </div>
+    <user-modal-form v-if="isModalDisplay == true" @close-modal="closeModal">
+
+    </user-modal-form>
+</div>

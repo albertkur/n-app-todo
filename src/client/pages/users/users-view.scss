@@ -1,0 +1,20 @@
+.users-view {
+    position: relative;
+    max-width: 80%;
+    margin: auto;
+
+
+    .lists {
+        ul {
+            li {
+                display: flex;
+                gap: 20px;
+
+                p {
+                    display: flex;
+                    gap: 4px;
+                }
+            }
+        }
+    }
+}
