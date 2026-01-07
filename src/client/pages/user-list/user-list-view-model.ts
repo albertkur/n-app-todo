@@ -1,4 +1,4 @@
-import { PageViewModel, template, route, components } from "@nivinjoseph/n-app";
+import { PageViewModel, template, route, components, NavigationService } from "@nivinjoseph/n-app";
 import "./user-list-view.scss";
 import { Routes } from "../routes";
 import { User } from "../../../sdk/models/user";
@@ -10,11 +10,12 @@ import { given } from "@nivinjoseph/n-defensive";
 
 @template(require("./user-list-view.html"))
 @route(Routes.userList)
-@inject("UserService")
+@inject("UserService", "NavigationService")
 @components(UserTableRowViewModel)
 export class UserListViewModel extends PageViewModel
 {
     private readonly _userService: UserService;
+    private readonly _navigationService: NavigationService;
 
 
     private _users: Array<User> = new Array<User>();
@@ -39,19 +40,26 @@ export class UserListViewModel extends PageViewModel
     public get searchKey(): string { return this._searchKey; }
     public set searchKey(value: string) { this._searchKey = value; }
 
-    public constructor(userService: UserService)
+    public constructor(userService: UserService, navigationService: NavigationService)
     {
         super();
         // local service
         given(userService, "userService").ensureHasValue().ensureIsObject();
+        given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
+
+        
         this._userService = userService;
+        this._navigationService = navigationService;
+
     }
 
 
     // manage user
     public async manageUser(user: User): Promise<void>
     {
-        console.log("manage user", user);
+        given(user, "user").ensureHasValue().ensureIsObject().ensure(t => t.id != null && this._users.some(p => p.id == t.id));
+        
+        this._navigationService.navigate(Routes.manageUser, { id: user.id });
     }
 
     // delete user
@@ -83,6 +91,7 @@ export class UserListViewModel extends PageViewModel
     }
 
 
+    // load users data from
     private async _loadUsers(): Promise<void>
     {
         this._users = new Array<User>();

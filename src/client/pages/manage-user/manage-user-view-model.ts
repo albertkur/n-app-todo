@@ -16,7 +16,7 @@ export class ManageUserViewModel extends PageViewModel
     private readonly _navigationService: NavigationService;
 
 
-    private readonly _user: User | null = null;
+    private _user: User | null = null;
     private _isNew: boolean;
 
     public get user(): User | null { return this._user; }
@@ -27,7 +27,7 @@ export class ManageUserViewModel extends PageViewModel
         super();
         given(userService, "userService").ensureHasValue().ensureIsObject();
         given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
-        
+
         this._userService = userService;
         this._navigationService = navigationService;
 
@@ -38,10 +38,18 @@ export class ManageUserViewModel extends PageViewModel
         };
         this._isNew = true;
     }
-    
+
     public async submit(): Promise<void>
     {
-        await this.addUser(this.user as User);
+        if (this.isNew)
+        {
+            console.log("create new user");
+            await this.addUser(this.user as User);
+        }
+        else
+        {
+            await this.updateUser(this.user as User);
+        }
     }
 
     // add user
@@ -78,15 +86,39 @@ export class ManageUserViewModel extends PageViewModel
 
         this._navigationService.navigate(Routes.userList);
     }
-    
-    // cancel
+
+    // cancel and redirect to user list
     public cancel(): void
     {
         this._navigationService.navigate(Routes.userList);
     }
 
-    protected override onEnter(): void
+    protected override async onEnter(id?: string): Promise<void>
     {
-        this._isNew = true;
+        given(id as string, "id").ensureIsString();
+
+
+        if (id == null || id.isEmptyOrWhiteSpace())
+        {
+            this._isNew = true;
+            this._user = {
+                firstName: "",
+                lastName: ""
+            };
+            return;
+        }
+
+        try
+        {
+
+            // this._isNew = false;
+            this._user = await this._userService.fetchUser(id);
+            this._isNew = false;
+        }
+        catch (error)
+        {
+            console.log("Something went wrong");
+        }
+
     }
 }
