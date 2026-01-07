@@ -4,7 +4,9 @@
         <p class="control">
             <input class="input" type="text" placeholder="Search by name" v-model="searchKey">
         </p>
-        <button class="button" @click="openModal">Add User</button>
+        <!-- <button class="button" @click="openModal">Add User</button> -->
+        <router-link to="/manageUser" class="button is-primary create-todo-button">Add User</router-link>
+
     </nav>
     <!-- table -->
     <div class="is-flex is-flex-direction-column is-align-items-center">
@@ -17,16 +19,11 @@
                 </tr>
             </thead>
             <tbody>
-                <user-table-row :key="user.id" v-for="user of filterUsers" :selectable-user="user" @manage-user="manageUser"
-                    @delete-user="deleteUser">
+                <user-table-row :key="user.id" v-for="user of filterUsers" :selectable-user="user"
+                    @manage-user="manageUser" @delete-user="deleteUser">
 
                 </user-table-row>
             </tbody>
         </table>
     </div>
-
-    <!-- user form modal -->
-    <user-modal-form v-if="isModalDisplay == true" @close-modal="closeModal" @add-user="addUser">
-
-    </user-modal-form>
 </div>
