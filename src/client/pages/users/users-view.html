@@ -6,17 +6,25 @@
         </p>
         <button class="button" @click="openModal">Add User</button>
     </nav>
-    <div class="lists">
-        <ul>
-            <!-- map the users data -->
-            <li :key="user.id" v-for="user of filterUsers">
-                <p><span class="label">First Name:</span> {{user.firstName}}</p>
-                <p><span class="label">
-                        Last Name:
-                    </span> {{user.lastName}}</p>
-            </li>
-        </ul>
+    <!-- table -->
+    <div class="is-flex is-flex-direction-column is-align-items-center">
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Operations</th>
+                </tr>
+            </thead>
+            <tbody>
+                <user-table-row :key="user.id" v-for="user of filterUsers" :selectable-user="user" @manage-user="manageUser"
+                    @delete-user="deleteUser">
+
+                </user-table-row>
+            </tbody>
+        </table>
     </div>
+
     <!-- user form modal -->
     <user-modal-form v-if="isModalDisplay == true" @close-modal="closeModal" @add-user="addUser">
 

@@ -4,11 +4,12 @@ import { Routes } from "../routes";
 import { UserModalFormViewModel } from "./components/user-modal-form/user-modal-form-view-model";
 import { User } from "../../../sdk/models/user";
 import { Uuid } from "@nivinjoseph/n-util";
+import { UserTableRowViewModel } from "./components/user-table-row/user-table-row-view-model";
 
 
 @template(require("./users-view.html"))
 @route(Routes.users)
-@components(UserModalFormViewModel)
+@components(UserModalFormViewModel, UserTableRowViewModel)
 export class UsersViewModel extends PageViewModel
 {
     private readonly _users: Array<User> = new Array<User>();
@@ -77,6 +78,20 @@ export class UsersViewModel extends PageViewModel
     {
         // close the user modal form
         this._isModalDisplay = false;
+    }
+    
+    
+    // manage user
+    public manageUser(): void
+    {
+        alert("manage user");
+    }
+    
+    // manage user
+    public deleteUser(user: User): void
+    {
+        const existingUserIndex = this._users.findIndex(t => t.id === user.id);
+        this._users.splice(existingUserIndex, 1);
     }
 
 }
