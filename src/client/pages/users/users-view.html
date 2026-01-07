@@ -2,13 +2,14 @@
     <h1 class="title">Users</h1>
     <nav class="level">
         <p class="control">
-            <input class="input" type="text" placeholder="Search by name">
+            <input class="input" type="text" placeholder="Search by name" v-model="searchKey">
         </p>
         <button class="button" @click="openModal">Add User</button>
     </nav>
     <div class="lists">
         <ul>
-            <li :key="user.id" v-for="user of getUsers">
+            <!-- map the users data -->
+            <li :key="user.id" v-for="user of filterUsers">
                 <p><span class="label">First Name:</span> {{user.firstName}}</p>
                 <p><span class="label">
                         Last Name:
@@ -16,6 +17,7 @@
             </li>
         </ul>
     </div>
+    <!-- user form modal -->
     <user-modal-form v-if="isModalDisplay == true" @close-modal="closeModal" @add-user="addUser">
 
     </user-modal-form>
