@@ -4,9 +4,10 @@
         <p class="control">
             <input class="input" type="text" placeholder="Search by name" v-model="searchKey">
         </p>
-        <!-- <button class="button" @click="openModal">Add User</button> -->
-        <router-link to="/manageUser" class="button is-primary create-todo-button">Add User</router-link>
-
+        <div>
+            <router-link to="/todos" class="button create-todo-button">Todos</router-link>
+            <router-link to="/manageUser" class="button is-primary create-todo-button">Add User</router-link>
+        </div>
     </nav>
     <!-- table -->
     <div class="is-flex is-flex-direction-column is-align-items-center">

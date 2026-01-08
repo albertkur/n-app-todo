@@ -82,7 +82,10 @@ export class TodoViewModel extends ComponentViewModel
         super.onMount(e);
         console.log("onMount component");
         
-        this._assignedTo = await this._userService.fetchUser(this.todoValue.assignedTo as string);        
+        if (this.todoValue.assignedTo)
+        {
+            this._assignedTo = await this._userService.fetchUser(this.todoValue.assignedTo);        
+        }
     }
 
     protected override onDestroy(): void
