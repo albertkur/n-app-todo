@@ -4,26 +4,37 @@ import { inject } from "@nivinjoseph/n-ject";
 import { given } from "@nivinjoseph/n-defensive";
 import { Routes } from "../../pages/routes";
 import { Todo } from "../../../sdk/proxies/todo/todo";
+import { UserService } from "../../../sdk/services/user-service/user-service";
+import { User } from "../../../sdk/models/user";
 
 
 @template(require("./todo-view.html"))
 @element("todo") // Name of the element. This is what you put as the html tag inside other page/component's template
 @bind({ "todo": "object" })  // The name of the properties that this component take (binds) using v-bind. example: `v-bind:value="todo"` 
-@inject("NavigationService") // dependency
+@inject("NavigationService", "UserService") // dependency
 export class TodoViewModel extends ComponentViewModel
 {
     private readonly _navigationService: NavigationService;
+    private readonly _userService: UserService;
+    
+    private _assignedTo: User | null;
 
 
     public get todoValue(): Todo { return this.getBound<Todo>("todo"); } // getting the bound value in the VM.
+    public get assignedTo(): User | null { return this._assignedTo; }
 
 
-    public constructor(navigationService: NavigationService)
+    public constructor(navigationService: NavigationService, userService: UserService)
     {
         super();
 
         given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
+        given(userService, "userService").ensureHasValue().ensureIsObject();
         this._navigationService = navigationService;
+        this._userService = userService;
+        
+        this._assignedTo = null;
+        
     }
 
 
@@ -66,10 +77,12 @@ export class TodoViewModel extends ComponentViewModel
         console.log("onCreate component");
     }
 
-    protected override onMount(e: HTMLElement): void
+    protected override async onMount(e: HTMLElement): Promise<void>
     {
         super.onMount(e);
         console.log("onMount component");
+        
+        this._assignedTo = await this._userService.fetchUser(this.todoValue.assignedTo as string);        
     }
 
     protected override onDestroy(): void

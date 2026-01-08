@@ -15,8 +15,7 @@
                 {{todoValue.description}}
             </div>
             <div class="content">
-                <p>Assigned to:</p>
-                <p>{{todoValue.assignedTo}}</p>
+                <p>Assigned to: <span>{{assignedTo ? `${assignedTo.firstName} ${assignedTo.lastName}` : "-"}}</span></p>
             </div>
         </div>
         <footer class="card-footer">
