@@ -22,21 +22,25 @@ export class ManageUserViewModel extends PageViewModel
     private _firstName: string;
     private _lastName: string;
     private _email: string;
+    private _dateOfBirth: string;
     private readonly _validator: Validator<this>;
 
     public get user(): User | null { return this._user; }
     // handle user form
     public get isNew(): boolean { return this._isNew; } // check is new create or update user information
-    
+
     public get firstName(): string { return this._firstName; }
     public set firstName(value: string) { this._firstName = value; }
-    
+
     public get lastName(): string { return this._lastName; }
     public set lastName(value: string) { this._lastName = value; }
-    
+
     public get email(): string { return this._email; }
     public set email(value: string) { this._email = value; }
-    
+
+    public get dateOfBirth(): string { return this._dateOfBirth; }
+    public set dateOfBirth(value: string) { this._dateOfBirth = value; }
+
     public get hasErrors(): boolean { return !this._validate(); } // if has any error return true
     public get errors(): object { return this._validator.errors; } // which field is error
 
@@ -52,6 +56,7 @@ export class ManageUserViewModel extends PageViewModel
         this._firstName = "";
         this._lastName = "";
         this._email = "";
+        this._dateOfBirth = "";
         this._validator = this._createValidator();
     }
 
@@ -64,11 +69,11 @@ export class ManageUserViewModel extends PageViewModel
         if (this.isNew)
         {
             console.log("create new user");
-            await this.addUser({ firstName: this._firstName, lastName: this._lastName, email: this._email } as User);
+            await this.addUser({ firstName: this._firstName, lastName: this._lastName, email: this._email, dateOfBirth: this._dateOfBirth } as User);
         }
         else
         {
-            await this.updateUser({ ...this.user, firstName: this._firstName, lastName: this._lastName, email: this._email } as User);
+            await this.updateUser({ ...this.user, firstName: this._firstName, lastName: this._lastName, email: this._email, dateOfBirth: this._dateOfBirth } as User);
         }
     }
 
@@ -124,7 +129,8 @@ export class ManageUserViewModel extends PageViewModel
             this._user = {
                 firstName: "",
                 lastName: "",
-                email: ""
+                email: "",
+                dateOfBirth: ""
             };
             this._firstName = "";
             this._lastName = "";
@@ -138,6 +144,7 @@ export class ManageUserViewModel extends PageViewModel
             this._firstName = this._user.firstName;
             this._lastName = this._user.lastName;
             this._email = this._user.email;
+            this._dateOfBirth = this._user.dateOfBirth;
             this._isNew = false;
         }
         catch (error)
@@ -168,12 +175,17 @@ export class ManageUserViewModel extends PageViewModel
             .isRequired().withMessage("The last name field is required.")
             .isString()
             .useValidationRule(strval.hasMaxLength(500));
-        
+
         validator
             .prop("email")
             .isOptional()
             .isString()
             .isEmail().withMessage("Please enter a valid email.");
+
+        validator
+            .prop("dateOfBirth")
+            .isRequired().withMessage("The date of birth field is required.")
+            .isString();
 
         return validator;
     }
