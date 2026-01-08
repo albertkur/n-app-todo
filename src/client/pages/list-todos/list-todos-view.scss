@@ -6,16 +6,19 @@
         width: calc(90% - 20px);
         display: flex;
         flex-direction: column;
-    }
 
+        nav {
+            display: flex;
+            justify-content: end;
+        }
 
-    .create-todo-button {
-        margin: 25px;
-    }
+        .create-todo-button {
+            margin: 25px;
+        }
 
-    .todo-container {
-        display: flex;
-        flex-wrap: wrap;
-        // justify-content: space-evenly;
+        .todo-container {
+            display: flex;
+            flex-wrap: wrap;
+        }
     }
 }
