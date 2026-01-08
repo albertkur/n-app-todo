@@ -14,16 +14,19 @@ export class LocalUserService implements UserService
             id: Uuid.create(),
             firstName: "John",
             lastName: "Doe",
+            email: "johndoe@gmail.com"
         },
             {
                 id: Uuid.create(),
                 firstName: "Jane",
                 lastName: "Doe",
+                email: "janedoe@gmail.com"
             },
             {
                 id: Uuid.create(),
                 firstName: "Pea",
                 lastName: "Nut",
+                email: "peanut@gmail.com"
             });
     }
 

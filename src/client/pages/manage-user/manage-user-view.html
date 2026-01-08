@@ -6,17 +6,26 @@
         <div class="field">
             <label class="label">First Name</label>
             <div class="control">
-                <input class="input" type="text" v-model="firstName" placeholder="First Name">
+                <input class="input" type="text" v-model="firstName" placeholder="First Name" :class="{'is-danger': errors.pax && errors.lastName }">
             </div>
             <p class="help is-danger">{{errors.firstName}}</p>
         </div>
-    
+
         <div class="field">
             <label class="label">Last Name</label>
             <div class="control">
-                <textarea class="input" type="text" v-model="lastName" placeholder="Last Name"></textarea>
+                <textarea class="input" type="text" v-model="lastName" placeholder="Last Name" :class="{'is-danger': errors.pax && errors.lastName }"></textarea>
             </div>
             <p class="help is-danger">{{errors.lastName}}</p>
+        </div>
+
+        <div class="field">
+            <label class="label">Email</label>
+            <div class="control">
+                <input class="input" type="email" v-model="email" placeholder="Email"
+                    :class="{'is-danger': errors.pax && errors.email }">
+            </div>
+            <p class=" help is-danger">{{errors.email}}</p>
         </div>
     
         <div class="field is-grouped">
