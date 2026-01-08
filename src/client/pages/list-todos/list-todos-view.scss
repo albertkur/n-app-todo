@@ -1,14 +1,19 @@
-.list-todos-view
-{
-    padding: 50px;
-    
-    .create-todo-button
-    {
+.list-todos-view {
+    height: 100dvh;
+    display: flex;
+
+    section {
+        width: calc(90% - 20px);
+        display: flex;
+        flex-direction: column;
+    }
+
+
+    .create-todo-button {
         margin: 25px;
     }
-    
-    .todo-container
-    {
+
+    .todo-container {
         display: flex;
         flex-wrap: wrap;
         // justify-content: space-evenly;

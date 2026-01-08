@@ -1,4 +1,8 @@
-.pax-list
-{
-    
+.pax-list {
+    height: 100dvh;
+    display: flex;
+
+    section {
+        width: calc(90% - 20px);
+    }
 }

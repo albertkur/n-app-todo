@@ -1,0 +1,24 @@
+.sidebar-view {
+    width: auto;
+
+    h1 {
+        white-space: nowrap;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        a {
+            padding: 4px;
+
+        }
+
+        a:hover {
+            color: white;
+            background-color: #333;
+            border-radius: 4px;
+        }
+    }
+}

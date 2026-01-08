@@ -1,5 +1,8 @@
 .users-view {
-    position: relative;
-    max-width: 80%;
-    margin: auto;
+    height: 100dvh;
+    display: flex;
+
+    section {
+        width: calc(90% - 20px);
+    }
 }
