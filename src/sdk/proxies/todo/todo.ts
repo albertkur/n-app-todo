@@ -5,11 +5,12 @@ export interface Todo
     description: string | null;
     isCompleted: boolean;
     isDeleted: boolean;
-    // added:
     assignedTo: string | null;
 
 
-    update(title: string, description: string, assignedTo:string): Promise<void>;
+    update(title: string, description: string | null, assignedTo: string | null): Promise<void>;
+    assignsTo(userId: string): Promise<void>;
+    unAssigns(): Promise<void>;
     complete(): Promise<void>;
     delete(): Promise<void>;
 }

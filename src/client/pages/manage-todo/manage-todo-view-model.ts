@@ -7,7 +7,7 @@ import { TodoService } from "../../../sdk/services/todo-service/todo-service";
 import { Todo } from "../../../sdk/proxies/todo/todo";
 import { Routes } from "../routes";
 import { UserService } from "../../../sdk/services/user-service/user-service";
-import { User } from "../../../sdk/models/user";
+import { User } from "../../../sdk/proxies/user/user";
 
 
 @template(require("./manage-todo-view.html"))

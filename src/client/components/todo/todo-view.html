@@ -15,7 +15,14 @@
                 {{todoValue.description}}
             </div>
             <div class="content">
-                <p>Assigned to: <span>{{assignedTo ? `${assignedTo.firstName} ${assignedTo.lastName}` : "-"}}</span></p>
+                <label class="label">Assigned to:</label>
+                <div class="control">
+                    <select class="input" v-model="todoValue.assignedTo" @change="handleAssignedTo($event)">
+                        <option value="unAssigns">-</option>
+                        <option :key="user.id" v-for="user of users" :user="user" :value="user.id">{{user.firstName}}
+                        </option>
+                    </select>
+                </div>
             </div>
         </div>
         <footer class="card-footer">
