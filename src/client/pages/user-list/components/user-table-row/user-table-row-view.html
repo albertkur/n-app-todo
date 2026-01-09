@@ -1,0 +1,15 @@
+<tr class="user-table-row">
+    <td>{{user.firstName}}</td>
+    <td>{{user.lastName}}</td>
+    <td>{{user.email}}</td>
+    <td>{{user.dateOfBirth}}</td>
+    <td>
+        <button class="button is-link is-outlined is-small" @click="manageUser">
+            Edit
+        </button>
+
+        <button class="ml-2 button is-danger is-outlined is-small" @click="handleDeleteUser">
+            Delete
+        </button>
+    </td>
+</tr>

@@ -22,8 +22,10 @@ export class ListTodosViewModel extends PageViewModel
     public constructor(todoService: TodoService) // dependency getting injected
     {
         super();
+        
         given(todoService, "todoService").ensureHasValue().ensureIsObject(); // defensive checks.
         this._todoService = todoService;
+        
         this._todos = [];
     }
 

@@ -1,0 +1,8 @@
+<div class="sidebar-view px-5">
+    <h1 class="title">Menus</h1>
+    <ul>
+        <router-link :to="menu.href" v-for="menu of menus" :menu="menu" :key="menu.href" :class="{ 'active-menu-item': isActiveMenu(menu.href) }">
+            {{menu.title}}
+        </router-link>
+    </ul>
+</div>

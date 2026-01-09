@@ -20,6 +20,18 @@
             <p class="help is-danger">{{errors.description}}</p>
         </div>
 
+        <div class="field">
+            <label class="label">Assigned To</label>
+            <div class="control">
+                <select class="input" v-model="assignedTo">
+                    <option disabled value="">Please select one</option>
+                    <option :key="user.id" v-for="user of allUsers" :user="user" :value="user.id">{{user.firstName}}
+                    </option>
+                </select>
+            </div>
+            <p class="help is-danger">{{errors.assignedTo}}</p>
+        </div>
+
         <div class="field is-grouped">
             <div class="control">
                 <button class="button is-link" v-on:click.prevent="save" v-bind:disabled="hasErrors">Save</button>

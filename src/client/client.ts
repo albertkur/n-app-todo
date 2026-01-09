@@ -9,6 +9,7 @@ import { given } from "@nivinjoseph/n-defensive";
 import { MockTodoService } from "../sdk/services/todo-service/mock-todo-service";
 import { components } from "./components/components";
 import { LocalPaxManagementService } from "../sdk/services/pax-management-service/local-pax-management-service";
+import { LocalUserService } from "../sdk/services/user-service/local-user-service";
 
 console.log(Vue);
 
@@ -21,7 +22,8 @@ class Installer implements ComponentInstaller
 
         registry
             .registerSingleton("TodoService", MockTodoService)
-            .registerSingleton("PaxManagementService", LocalPaxManagementService); // installing dependencies, usually used by VMs
+            .registerSingleton("PaxManagementService", LocalPaxManagementService) // installing dependencies, usually used by VMs
+            .registerSingleton("UserService", LocalUserService); // local user service
 
 
         // Types of dependencies: 
