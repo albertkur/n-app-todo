@@ -1,12 +1,12 @@
 import { template, PageViewModel, route, NavigationService, DialogService } from "@nivinjoseph/n-app";
 import "./manage-user-view.scss";
-import { User } from "../../../sdk/models/user";
 import { Routes } from "../routes";
 import { UserService } from "../../../sdk/services/user-service/user-service";
 import { inject } from "@nivinjoseph/n-ject";
 import { given } from "@nivinjoseph/n-defensive";
 import { Validator, strval } from "@nivinjoseph/n-validate";
 import { ErrorMessage } from "../../models/error-message";
+import { User } from "../../../sdk/proxies/user/user";
 
 
 @template(require("./manage-user-view.html"))
@@ -53,10 +53,13 @@ export class ManageUserViewModel extends PageViewModel
         given(userService, "userService").ensureHasValue().ensureIsObject();
         given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
         given(dialogService, "dialogService").ensureHasValue().ensureIsObject();
+        
+
         this._userService = userService;
         this._navigationService = navigationService;
         this._dialogService = dialogService;
 
+        this._user = null;
         this._isNew = true;
         this._firstName = "";
         this._lastName = "";
@@ -71,63 +74,51 @@ export class ManageUserViewModel extends PageViewModel
         if (!this._validate())
             return;
 
-        if (this.isNew)
-        {
-            await this.addUser({ firstName: this._firstName, lastName: this._lastName, email: this._email, dateOfBirth: this._dateOfBirth } as User);
+        if (this._user)
+        { // update user information
+            this._dialogService.showLoadingScreen();
+            try
+            {
+                await this._user.update(this._firstName, this._lastName, this._email, this._dateOfBirth);
+                this._dialogService.showSuccessMessage("Update user successfully");
+            }
+            catch (error)
+            {
+                console.log("UPDATE USER: something went wrong", error);
+                this._dialogService.showErrorMessage(ErrorMessage.generic);
+            }
         }
         else
-        {
-            await this.updateUser({ ...this.user, firstName: this._firstName, lastName: this._lastName, email: this._email, dateOfBirth: this._dateOfBirth } as User);
+        { // create a new user
+            this._dialogService.showLoadingScreen();
+            try 
+            {
+                await this.addUser(this._firstName, this._lastName, this._email, this._dateOfBirth);
+                this._dialogService.showSuccessMessage("Create user successfully");
+            }
+            catch (error)
+            {
+                console.log("ADD USER: something went wrong", error);
+                this._dialogService.showErrorMessage(ErrorMessage.generic);
+            }
+            finally
+            {
+                this._dialogService.hideLoadingScreen();
+            }
+
+            this._navigationService.navigate(Routes.userList);
         }
     }
 
     // add user
-    public async addUser(user: User): Promise<void>
+    public async addUser(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<void>
     {
-        given(user, "user").ensureHasValue().ensureIsObject();
+        given(firstName, "firstName").ensureHasValue().ensureIsString();
+        given(lastName, "lastName").ensureHasValue().ensureIsString();
+        given(email, "email").ensureHasValue().ensureIsString();
+        given(dateOfBirth, "dateOfBirth").ensureHasValue().ensureIsString();
 
-        this._dialogService.showLoadingScreen();
-        try 
-        {
-            await this._userService.addUser(user);
-            this._dialogService.showSuccessMessage("Create user successfully");
-        }
-        catch (error)
-        {
-            console.log("ADD USER: something went wrong");
-            this._dialogService.showErrorMessage(ErrorMessage.generic);
-        }
-        finally
-        {
-            this._dialogService.hideLoadingScreen();
-        }
-
-        this._navigationService.navigate(Routes.userList);
-    }
-
-
-    // update user
-    public async updateUser(user: User): Promise<void>
-    {
-        given(user, "user").ensureHasValue().ensureIsObject();
-
-        this._dialogService.showLoadingScreen();
-        try 
-        {
-            await this._userService.update(user);
-            this._dialogService.showSuccessMessage("Update user successfully");
-        }
-        catch (error)
-        {
-            console.log("ADD USER: something went wrong");
-            this._dialogService.showErrorMessage(ErrorMessage.generic);
-        }
-        finally
-        {
-            this._dialogService.hideLoadingScreen();
-        }
-
-        this._navigationService.navigate(Routes.userList);
+        await this._userService.addUser(firstName, lastName, email, dateOfBirth);
     }
 
     // cancel and redirect to user list
@@ -141,45 +132,24 @@ export class ManageUserViewModel extends PageViewModel
         given(id as string, "id").ensureIsString();
 
 
-        if (id == null || id.isEmptyOrWhiteSpace())
+        if (id && !id.isEmptyOrWhiteSpace())
+        {
+            this._isNew = false;
+            this._userService.fetchUser(id).then(t => 
+            {
+                this._user = t;
+
+                this._firstName = t.firstName;
+                this._lastName = t.lastName;
+                this._email = t.email || "";
+                this._dateOfBirth = t.dateOfBirth;
+            }
+            ).catch(e => console.log(e));
+        }
+        else
         {
             this._isNew = true;
-            this._user = {
-                firstName: "",
-                lastName: "",
-                email: "",
-                dateOfBirth: ""
-            };
-            this._firstName = "";
-            this._lastName = "";
-            this._email = "";
-            return;
         }
-
-        this._dialogService.showLoadingScreen();
-        try
-        {
-            this._user = await this._userService.fetchUser(id);
-
-            this._firstName = this._user.firstName;
-            this._lastName = this._user.lastName;
-            this._email = this._user.email;
-            this._dateOfBirth = this._user.dateOfBirth;
-            this._isNew = false;
-
-        }
-        catch (error)
-        {
-            console.log("Something went wrong");
-            this._dialogService.showErrorMessage(ErrorMessage.generic);
-
-        }
-        finally
-        {
-            this._dialogService.hideLoadingScreen();
-        }
-
-
     }
 
     private _validate(): boolean

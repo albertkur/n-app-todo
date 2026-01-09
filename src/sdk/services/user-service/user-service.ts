@@ -1,15 +1,9 @@
-import { User } from "../../models/user";
+import { User } from "../../proxies/user/user";
 
 
 export interface UserService
 {
     fetchAll(): Promise<Array<User>>;
-
     fetchUser(id: string): Promise<User>;
-
-    addUser(user: User): Promise<void>;
-
-    update(user: User): Promise<void>;
-
-    delete(id: string): Promise<void>;
+    addUser(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<User>;
 }

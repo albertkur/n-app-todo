@@ -1,77 +1,46 @@
 import { Uuid } from "@nivinjoseph/n-util";
-import { User } from "../../models/user";
 import { UserService } from "./user-service";
 import { given } from "@nivinjoseph/n-defensive";
-import { ApplicationException } from "@nivinjoseph/n-exception";
+import { User } from "../../proxies/user/user";
+import { MockUserProxy } from "../../proxies/user/mock-user-proxy";
 
 export class LocalUserService implements UserService
 {
-    private readonly _allUsers: Array<User> = new Array<User>();
+    private readonly _allUsers: Array<MockUserProxy>;
 
     public constructor()
     {
-        this._allUsers.push({
-            id: Uuid.create(),
-            firstName: "John",
-            lastName: "Doe",
-            email: "johndoe@gmail.com",
-            dateOfBirth: "1998-01-08"
-        },
-            {
-                id: Uuid.create(),
-                firstName: "Jane",
-                lastName: "Doe",
-                email: "janedoe@gmail.com",
-                dateOfBirth: "1998-01-10"
-            },
-            {
-                id: Uuid.create(),
-                firstName: "Pea",
-                lastName: "Nut",
-                email: "peanut@gmail.com",
-                dateOfBirth: "1998-02-08"
-            });
+        const users = new Array<MockUserProxy>();
+        const count = 10;
+
+        for (let i = 0; i < count; i++)
+        {
+            users.push(new MockUserProxy(Uuid.create(), `First Name ${i}`, `Last Name ${i}`, "1998-01-01", `email${i}@gmail.com`));
+        }
+        this._allUsers = users;
     }
 
     public async fetchAll(): Promise<Array<User>>
     {
-        return this._allUsers.map(t => ({ ...t }));
+        return Promise.resolve(this._allUsers);
     }
 
     public async fetchUser(id: string): Promise<User>
     {
         given(id, "id").ensureHasValue().ensureIsString();
 
-        const existingPaxIndex = this._allUsers.findIndex(t => t.id === id);
-        if (existingPaxIndex === -1)
-            throw new ApplicationException(`User with id ${id} not found`);
-
-        const user = this._allUsers[existingPaxIndex];
-
-        return { ...user };
+        return Promise.resolve(this._allUsers.find(t => t.id === id) as User);
     }
 
-    public async addUser(user: User): Promise<void>
+    public async addUser(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<User>
     {
-        given(user, "user").ensureHasValue().ensureIsObject().ensure(t => t.id == null);
+        given(firstName, "firstName").ensureHasValue().ensureIsString();
+        given(lastName, "lastName").ensureHasValue().ensureIsString();
+        given(email, "email").ensureHasValue().ensureIsString();
+        given(dateOfBirth, "dateOfBirth").ensureHasValue().ensureIsString();
 
-        user.id = Uuid.create();
-        this._allUsers.push({ ...user });
-    }
-
-    public async update(user: User): Promise<void>
-    {
-        given(user, "user").ensureHasValue().ensureIsObject().ensure(t => t.id != null && this._allUsers.some(p => p.id == t.id));
-
-        const existingPaxIndex = this._allUsers.findIndex(t => t.id === user.id);
-        this._allUsers.splice(existingPaxIndex, 1, { ...user });
-    }
-
-    public async delete(id: string): Promise<void>
-    {
-        given(id, "id").ensureHasValue().ensureIsString().ensure(t => this._allUsers.some(user => user.id === t));
-
-        const existingPaxIndex = this._allUsers.findIndex(t => t.id === id);
-        this._allUsers.splice(existingPaxIndex, 1);
+        const user = new MockUserProxy(Uuid.create(), firstName, lastName, dateOfBirth, email);
+        this._allUsers.push(user);
+        return Promise.resolve(user);
     }
 }
