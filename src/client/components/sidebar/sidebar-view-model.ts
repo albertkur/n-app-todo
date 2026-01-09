@@ -3,12 +3,7 @@ import { Routes } from "../../pages/routes";
 import "./sidebar-view.scss";
 import { inject } from "@nivinjoseph/n-ject";
 import { given } from "@nivinjoseph/n-defensive";
-
-interface Menu
-{
-    title: string;
-    href: string;
-}
+import { Menu } from "../../../sdk/models/menu";
 
 @template(require("./sidebar-view.html"))
 @element("sidebar")

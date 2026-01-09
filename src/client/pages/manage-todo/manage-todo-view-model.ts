@@ -23,9 +23,10 @@ export class ManageTodoViewModel extends PageViewModel
     private _todo: Todo | null;
     private _title: string;
     private _description: string;
-    private readonly _validator: Validator<this>;
-    private _users: Array<User> | null;
     private _assignedTo: string;
+    private readonly _validator: Validator<this>;
+    
+    private _users: Array<User> | null;
 
 
     public get isNew(): boolean { return this._isNew; }
@@ -56,6 +57,7 @@ export class ManageTodoViewModel extends PageViewModel
         this._todoService = todoService;
         this._navigationService = navigationService;
         this._userService = userService;
+        
         this._users = null;
         this._assignedTo = "";
         this._isNew = false;

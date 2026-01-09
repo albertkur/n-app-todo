@@ -1,4 +1,4 @@
-import { template, PageViewModel, route, NavigationService } from "@nivinjoseph/n-app";
+import { template, PageViewModel, route, NavigationService, DialogService } from "@nivinjoseph/n-app";
 import "./manage-user-view.scss";
 import { User } from "../../../sdk/models/user";
 import { Routes } from "../routes";
@@ -6,18 +6,21 @@ import { UserService } from "../../../sdk/services/user-service/user-service";
 import { inject } from "@nivinjoseph/n-ject";
 import { given } from "@nivinjoseph/n-defensive";
 import { Validator, strval } from "@nivinjoseph/n-validate";
+import { ErrorMessage } from "../../models/error-message";
 
 
 @template(require("./manage-user-view.html"))
 @route(Routes.manageUser)
-@inject("UserService", "NavigationService")
+@inject("UserService", "NavigationService", "DialogService")
 export class ManageUserViewModel extends PageViewModel
 {
     private readonly _userService: UserService;
     private readonly _navigationService: NavigationService;
+    private readonly _dialogService: DialogService;
 
 
     private _user: User | null = null;
+
     private _isNew: boolean;
     private _firstName: string;
     private _lastName: string;
@@ -26,7 +29,7 @@ export class ManageUserViewModel extends PageViewModel
     private readonly _validator: Validator<this>;
 
     public get user(): User | null { return this._user; }
-    // handle user form
+
     public get isNew(): boolean { return this._isNew; } // check is new create or update user information
 
     public get firstName(): string { return this._firstName; }
@@ -44,14 +47,16 @@ export class ManageUserViewModel extends PageViewModel
     public get hasErrors(): boolean { return !this._validate(); } // if has any error return true
     public get errors(): object { return this._validator.errors; } // which field is error
 
-    public constructor(userService: UserService, navigationService: NavigationService)
+    public constructor(userService: UserService, navigationService: NavigationService, dialogService: DialogService)
     {
         super();
         given(userService, "userService").ensureHasValue().ensureIsObject();
         given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
-
+        given(dialogService, "dialogService").ensureHasValue().ensureIsObject();
         this._userService = userService;
         this._navigationService = navigationService;
+        this._dialogService = dialogService;
+
         this._isNew = true;
         this._firstName = "";
         this._lastName = "";
@@ -68,7 +73,6 @@ export class ManageUserViewModel extends PageViewModel
 
         if (this.isNew)
         {
-            console.log("create new user");
             await this.addUser({ firstName: this._firstName, lastName: this._lastName, email: this._email, dateOfBirth: this._dateOfBirth } as User);
         }
         else
@@ -82,13 +86,20 @@ export class ManageUserViewModel extends PageViewModel
     {
         given(user, "user").ensureHasValue().ensureIsObject();
 
+        this._dialogService.showLoadingScreen();
         try 
         {
             await this._userService.addUser(user);
+            this._dialogService.showSuccessMessage("Create user successfully");
         }
         catch (error)
         {
             console.log("ADD USER: something went wrong");
+            this._dialogService.showErrorMessage(ErrorMessage.generic);
+        }
+        finally
+        {
+            this._dialogService.hideLoadingScreen();
         }
 
         this._navigationService.navigate(Routes.userList);
@@ -100,13 +111,20 @@ export class ManageUserViewModel extends PageViewModel
     {
         given(user, "user").ensureHasValue().ensureIsObject();
 
+        this._dialogService.showLoadingScreen();
         try 
         {
             await this._userService.update(user);
+            this._dialogService.showSuccessMessage("Update user successfully");
         }
         catch (error)
         {
             console.log("ADD USER: something went wrong");
+            this._dialogService.showErrorMessage(ErrorMessage.generic);
+        }
+        finally
+        {
+            this._dialogService.hideLoadingScreen();
         }
 
         this._navigationService.navigate(Routes.userList);
@@ -138,19 +156,29 @@ export class ManageUserViewModel extends PageViewModel
             return;
         }
 
+        this._dialogService.showLoadingScreen();
         try
         {
             this._user = await this._userService.fetchUser(id);
+
             this._firstName = this._user.firstName;
             this._lastName = this._user.lastName;
             this._email = this._user.email;
             this._dateOfBirth = this._user.dateOfBirth;
             this._isNew = false;
+
         }
         catch (error)
         {
             console.log("Something went wrong");
+            this._dialogService.showErrorMessage(ErrorMessage.generic);
+
         }
+        finally
+        {
+            this._dialogService.hideLoadingScreen();
+        }
+
 
     }
 
@@ -178,14 +206,15 @@ export class ManageUserViewModel extends PageViewModel
 
         validator
             .prop("email")
-            .isOptional()
+            .isRequired().withMessage("The email field is required.")
             .isString()
             .isEmail().withMessage("Please enter a valid email.");
 
         validator
             .prop("dateOfBirth")
             .isRequired().withMessage("The date of birth field is required.")
-            .isString();
+            .isDate("YYYY-MM-DD")
+            .ensure(date => new Date(date) < new Date()).withMessage("Date of birth can not be future");
 
         return validator;
     }
