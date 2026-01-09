@@ -13,7 +13,7 @@ export class MockTodoService implements TodoService
     public constructor()
     {
         const todos = new Array<MockTodoProxy>();
-        const count = 3;
+        const count = 10;
 
         for (let i = 0; i < count; i++)
             todos.push(new MockTodoProxy("id" + i, "title" + i, "description" + i, null));
