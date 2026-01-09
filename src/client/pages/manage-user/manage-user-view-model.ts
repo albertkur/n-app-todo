@@ -7,6 +7,7 @@ import { given } from "@nivinjoseph/n-defensive";
 import { Validator, strval } from "@nivinjoseph/n-validate";
 import { ErrorMessage } from "../../models/error-message";
 import { User } from "../../../sdk/proxies/user/user";
+import { dedupe, Duration } from "@nivinjoseph/n-util";
 
 
 @template(require("./manage-user-view.html"))
@@ -53,7 +54,7 @@ export class ManageUserViewModel extends PageViewModel
         given(userService, "userService").ensureHasValue().ensureIsObject();
         given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
         given(dialogService, "dialogService").ensureHasValue().ensureIsObject();
-        
+
 
         this._userService = userService;
         this._navigationService = navigationService;
@@ -68,54 +69,45 @@ export class ManageUserViewModel extends PageViewModel
         this._validator = this._createValidator();
     }
 
+    @dedupe(Duration.fromSeconds(1))
     public async submit(): Promise<void>
     {
         this._validator.enable();
         if (!this._validate())
             return;
 
-        if (this._user)
-        { // update user information
-            this._dialogService.showLoadingScreen();
-            try
+        this._dialogService.showLoadingScreen();
+        try
+        {
+            if (this._user)
             {
                 await this._user.update(this._firstName, this._lastName, this._email, this._dateOfBirth);
-                this._dialogService.showSuccessMessage("Update user successfully");
             }
-            catch (error)
-            {
-                console.log("UPDATE USER: something went wrong", error);
-                this._dialogService.showErrorMessage(ErrorMessage.generic);
-            }
-        }
-        else
-        { // create a new user
-            this._dialogService.showLoadingScreen();
-            try 
+            else
             {
                 await this.addUser(this._firstName, this._lastName, this._email, this._dateOfBirth);
-                this._dialogService.showSuccessMessage("Create user successfully");
             }
-            catch (error)
-            {
-                console.log("ADD USER: something went wrong", error);
-                this._dialogService.showErrorMessage(ErrorMessage.generic);
-            }
-            finally
-            {
-                this._dialogService.hideLoadingScreen();
-            }
-
-            this._navigationService.navigate(Routes.userList);
+            this._dialogService.showSuccessMessage(this._user ? "Update user successfully" : "Create user successfully");
         }
+        catch (error)
+        {
+            console.log("UPDATE USER: something went wrong", error);
+            this._dialogService.showErrorMessage(ErrorMessage.generic);
+        }
+        finally
+        {
+            this._dialogService.hideLoadingScreen();
+        }
+
+        this._navigationService.navigate(Routes.userList);
     }
 
     // add user
-    public async addUser(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<void>
+    public async addUser(firstName: string, lastName: string, email: string | null, dateOfBirth: string): Promise<void>
     {
         given(firstName, "firstName").ensureHasValue().ensureIsString();
         given(lastName, "lastName").ensureHasValue().ensureIsString();
-        given(email, "email").ensureHasValue().ensureIsString();
+        given(email, "email").ensureIsString();
         given(dateOfBirth, "dateOfBirth").ensureHasValue().ensureIsString();
 
         await this._userService.addUser(firstName, lastName, email, dateOfBirth);
@@ -176,7 +168,7 @@ export class ManageUserViewModel extends PageViewModel
 
         validator
             .prop("email")
-            .isRequired().withMessage("The email field is required.")
+            .isOptional()
             .isString()
             .isEmail().withMessage("Please enter a valid email.");
 

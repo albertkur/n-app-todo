@@ -22,7 +22,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <user-table-row :key="user.id" v-for="user of filterUsers" :selectable-user="user">
+                    <user-table-row :key="user.id" v-for="user of filterUsers" :selectable-user="user" @handle-delete-user="handleDeleteUser">
                     </user-table-row>
                 </tbody>
             </table>

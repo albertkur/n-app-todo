@@ -17,7 +17,7 @@ export class MockUserProxy implements User
     public get dateOfBirth(): string { return this._dateOfBirth; }
     public get isDeleted(): boolean { return this._isDeleted; }
 
-    public constructor(id: string, firstName: string, lastName: string, dateOfBirth: string, email?: string)
+    public constructor(id: string, firstName: string, lastName: string, dateOfBirth: string, email: string | null)
     {
         given(id, "id").ensureHasValue().ensureIsString();
         this._id = id;
@@ -28,7 +28,7 @@ export class MockUserProxy implements User
         given(lastName, "lastName").ensureHasValue().ensureIsString();
         this._lastName = lastName;
 
-        given(email, "email").ensureHasValue().ensureIsString();
+        given(email, "email").ensureIsString();
         this._email = email || null;
 
         given(dateOfBirth, "dateOfBirth").ensureHasValue().ensureIsString();
@@ -37,11 +37,13 @@ export class MockUserProxy implements User
         this._isDeleted = false;
     }
 
-    public async update(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<void>
+    public async update(firstName: string, lastName: string, email: string | null, dateOfBirth: string): Promise<void>
     {
+        given(this, "this").ensure(t => !t.isDeleted, "user is already deleted");
+        
         given(firstName, "firstName").ensureHasValue().ensureIsString();
         given(lastName, "lastName").ensureHasValue().ensureIsString();
-        given(email, "email").ensureHasValue().ensureIsString();
+        given(email, "email").ensureIsString();
         given(dateOfBirth, "dateOfBirth").ensureHasValue().ensureIsString();
 
         this._firstName = firstName;

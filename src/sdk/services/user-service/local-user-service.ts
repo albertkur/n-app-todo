@@ -22,14 +22,14 @@ export class LocalUserService implements UserService
 
     public async fetchAll(): Promise<Array<User>>
     {
-        return Promise.resolve(this._allUsers);
+        return Promise.resolve(this._allUsers.where(t => !t.isDeleted));
     }
 
     public async fetchUser(id: string): Promise<User>
     {
         given(id, "id").ensureHasValue().ensureIsString();
 
-        return Promise.resolve(this._allUsers.find(t => t.id === id) as User);
+        return Promise.resolve(this._allUsers.find(t => t.id === id && !t.isDeleted) as User);
     }
 
     public async addUser(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<User>

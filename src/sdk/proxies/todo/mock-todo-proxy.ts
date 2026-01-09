@@ -19,7 +19,6 @@ export class MockTodoProxy implements Todo
     public get description(): string | null { return this._description; }
     
     public get assignedTo(): string | null { return this._assignedTo; }
-    public set assignedTo(userId: string) { this._assignedTo = userId; }
     
     public get isCompleted(): boolean { return this._isCompleted; }
     

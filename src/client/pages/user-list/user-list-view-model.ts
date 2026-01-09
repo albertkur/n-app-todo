@@ -7,15 +7,17 @@ import { inject } from "@nivinjoseph/n-ject";
 import { given } from "@nivinjoseph/n-defensive";
 import { ErrorMessage } from "../../models/error-message";
 import { User } from "../../../sdk/proxies/user/user";
+import { TodoService } from "../../../sdk/services/todo-service/todo-service";
 
 
 @template(require("./user-list-view.html"))
 @route(Routes.userList)
-@inject("UserService", "NavigationService", "DialogService")
+@inject("UserService", "DialogService", "TodoService")
 @components(UserTableRowViewModel)
 export class UserListViewModel extends PageViewModel
 {
     private readonly _userService: UserService;
+    private readonly _todoService: TodoService;
     private readonly _dialogService: DialogService;
 
 
@@ -34,22 +36,50 @@ export class UserListViewModel extends PageViewModel
         }
 
 
-        return users.where(user => !user.isDeleted);
+        return users;
     }
     public get searchKey(): string { return this._searchKey; } // get search key
     public set searchKey(value: string) { this._searchKey = value; } // set search key
 
 
-    public constructor(userService: UserService, dialogService: DialogService)
+    public constructor(userService: UserService, dialogService: DialogService, todoService: TodoService)
     {
         super();
 
         given(userService, "userService").ensureHasValue().ensureIsObject();
         given(dialogService, "dialogService").ensureHasValue().ensureIsObject();
+        given(todoService, "todoService").ensureHasValue().ensureIsObject();
 
 
         this._userService = userService;
         this._dialogService = dialogService;
+        this._todoService = todoService;
+    }
+
+    public async handleDeleteUser(user: User): Promise<void>
+    {
+        try 
+        {
+            const todos = await this._todoService.getTodos();
+
+            const isAssigned = todos.some(t => t.assignedTo == user.id); // return true when user is assigned any todo
+
+            if (isAssigned)
+            {
+                alert("This user is assigned in todo");
+            }
+            else
+            {
+                await user.delete();
+            }
+        }
+        catch (error)
+        {
+            console.log(error);
+            this._dialogService.showErrorMessage(ErrorMessage.generic);
+        }
+
+        await this._loadUsers();
     }
 
     protected override onEnter(): void

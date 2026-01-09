@@ -8,6 +8,6 @@ export interface User
     isDeleted: boolean;
     
     
-    update(firstName: string, lastName: string, email: string, dateOfBirth: string): Promise<void>;
+    update(firstName: string, lastName: string, email: string | null, dateOfBirth: string): Promise<void>;
     delete(): Promise<void>;
 }
