@@ -1,0 +1,31 @@
+.sidebar-view {
+    width: auto;
+
+    h1 {
+        white-space: nowrap;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        a {
+            padding: 4px;
+
+        }
+
+        a:hover {
+            color: white;
+            background-color: grey;
+            border-radius: 4px;
+        }
+
+        .active-menu-item { // active menu style
+            font-weight: bold;
+            color: #42b983;
+            border-bottom: 2px solid #42b983;
+
+        }
+    }
+}

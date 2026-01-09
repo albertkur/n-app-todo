@@ -1,12 +1,16 @@
 <div class="list-todos-view">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
-            <router-link to="/manageTodo" class="button is-primary create-todo-button">Create Todo</router-link>
-        </div>
-    </nav>
+    <sidebar></sidebar>
+    <section>
+        <h1 class="title">Todos</h1>
+        <nav class="level">
+            <div>
+                <router-link to="/manageTodo" class="button is-primary create-todo-button">Create Todo</router-link>
+            </div>
+        </nav>
 
-    <div class="todo-container">
-        <!-- using the custom component that we built -->
-        <todo v-for="todo in todos" v-bind:key="todo.id" v-bind:todo="todo"></todo>
-    </div>
+        <div class="todo-container">
+            <!-- using the custom component that we built -->
+            <todo v-for="todo in todos" v-bind:key="todo.id" v-bind:todo="todo"></todo>
+        </div>
+    </section>
 </div>

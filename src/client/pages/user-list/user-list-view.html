@@ -1,0 +1,31 @@
+<div class="users-view">
+    <sidebar></sidebar>
+    <section>
+        <h1 class="title">Users</h1>
+        <nav class="level">
+            <p class="control">
+                <input class="input" type="text" placeholder="Search by name" v-model="searchKey">
+            </p>
+            <div>
+                <router-link to="/manageUser" class="button is-primary create-todo-button">Add User</router-link>
+            </div>
+        </nav>
+        <div class="is-flex is-flex-direction-column is-align-items-center">
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Date of Birth</th>
+                        <th>Operations</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <user-table-row :key="user.id" v-for="user of filterUsers" :selectable-user="user" @handle-delete-user="handleDeleteUser">
+                    </user-table-row>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
