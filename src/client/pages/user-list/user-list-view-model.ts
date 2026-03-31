@@ -17,8 +17,8 @@ import { TodoService } from "../../../sdk/services/todo-service/todo-service";
 export class UserListViewModel extends PageViewModel
 {
     private readonly _userService: UserService;
-    private readonly _todoService: TodoService;
     private readonly _dialogService: DialogService;
+    private readonly _todoService: TodoService;
 
 
     private _users: Array<User> = new Array<User>();
@@ -32,9 +32,9 @@ export class UserListViewModel extends PageViewModel
         if (this._searchKey.isNotEmptyOrWhiteSpace())
         {
             users = users
-                .where((t) => `${t.firstName}${t.lastName}`.toLocaleLowerCase().contains(this._searchKey.toLowerCase()));
+                .where((t) => `${t.firstName}${t.lastName}`.toLocaleLowerCase()
+                    .contains(this._searchKey.toLowerCase()));
         }
-
 
         return users;
     }
@@ -56,8 +56,13 @@ export class UserListViewModel extends PageViewModel
         this._todoService = todoService;
     }
 
+
     public async handleDeleteUser(user: User): Promise<void>
     {
+        if (!confirm(`Are you sure you want to delete the user: ${user.firstName} ${user.lastName}`))
+            return;
+
+        this._dialogService.showLoadingScreen();
         try 
         {
             const todos = await this._todoService.getTodos();
@@ -78,9 +83,14 @@ export class UserListViewModel extends PageViewModel
             console.log(error);
             this._dialogService.showErrorMessage(ErrorMessage.generic);
         }
+        finally
+        {
+            this._dialogService.hideLoadingScreen();
+        }
 
         await this._loadUsers();
     }
+
 
     protected override onEnter(): void
     {
@@ -93,12 +103,9 @@ export class UserListViewModel extends PageViewModel
     // load users data from
     private async _loadUsers(): Promise<void>
     {
-        this._users = new Array<User>();
         try
         {
-            this._userService.fetchAll()
-                .then(t => this._users = t)
-                .catch(e => console.error(e));
+            this._users = await this._userService.fetchAll();
         }
         catch (e)
         {

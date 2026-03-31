@@ -8,6 +8,7 @@ export class LocalUserService implements UserService
 {
     private readonly _allUsers: Array<MockUserProxy>;
 
+
     public constructor()
     {
         const users = new Array<MockUserProxy>();
@@ -19,6 +20,7 @@ export class LocalUserService implements UserService
         }
         this._allUsers = users;
     }
+
 
     public async fetchAll(): Promise<Array<User>>
     {
