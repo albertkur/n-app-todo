@@ -9016,6 +9016,7 @@ __metadata:
     vue-hot-reload-api: "npm:^2.3.4"
     vue-loader: "npm:^15.9.8"
     vue-template-compiler: "npm:2.6.14"
+    vuetify: "npm:^2.6.14"
     webpack: "npm:^5.72.1"
     webpack-cli: "npm:^4.9.2"
     webpack-dev-middleware: "npm:^5.3.3"
@@ -12851,6 +12852,15 @@ __metadata:
   version: 1.9.1
   resolution: "vue-template-es2015-compiler@npm:1.9.1"
   checksum: 10c0/21d27d1c6afe10a47f17793e18afb7f321888d3ca728bfdb2a79ff49789ed9b40e98abcb68b5499f3da1bbb76a0f188b94aeb5ab0e879f46d6399ac5d4ae38c8
+  languageName: node
+  linkType: hard
+
+"vuetify@npm:^2.6.14":
+  version: 2.7.2
+  resolution: "vuetify@npm:2.7.2"
+  peerDependencies:
+    vue: ^2.6.4
+  checksum: 10c0/2c7df556c50d0ab74901d112b3944cf7022c97a58c423cc8572ece129bf81ac077652e0bd59aca29a0999d94d4aae1d06653cec6cc82612e81c48690d78fa60f
   languageName: node
   linkType: hard
 

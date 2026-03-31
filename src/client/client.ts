@@ -1,5 +1,8 @@
 import "@nivinjoseph/n-ext";
+
 import "./styles/main.scss";
+import "vuetify/dist/vuetify.min.css";
+
 import "material-design-icons/iconfont/material-icons.css";
 import { ClientApp, DefaultDialogService, DialogLocation, Vue } from "@nivinjoseph/n-app";
 import { Routes } from "./pages/routes";
@@ -9,8 +12,49 @@ import { given } from "@nivinjoseph/n-defensive";
 import { MockTodoService } from "../sdk/services/todo-service/mock-todo-service";
 import { components } from "./components/components";
 import { LocalPaxManagementService } from "../sdk/services/pax-management-service/local-pax-management-service";
+import Vuetify, { type UserVuetifyPreset } from "vuetify";
+
 
 console.log(Vue);
+
+// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+Vue.use(Vuetify);
+const options: UserVuetifyPreset = {
+    theme: {
+        dark: false,
+        themes: {
+            light: {
+                primary: "#337E74",
+                lightPrimary: "#E6F4F1",
+                darkPrimary: "#1F4F48",
+                error: "#F44336",
+                warning: "#FFC107",
+                accent: "#256058",
+                success: "#28A745",
+                brightGreen: "#22C55E",
+                lighterGreen: "#4CD984",
+                darkGreen: "#166534",
+                brightRed: "#EF4444",
+                lighterRed: "#F37A7A",
+                darkRed: "#991B1B",
+                lightGreen: "#DCFCE7",
+                lightRed: "#FEF2F2",
+                extraLightRed: "#FFF5F5",
+                lightPurple: "#F3E8FF",
+                darkPurple: "#6B21A8",
+                extraLightPurple: "#FAF5FF",
+                lightWarning: "#FEF9C3",
+                extraLightWarning: "#FEFCE8",
+                darkWarning: "#854D0E",
+                extraLightBlue: "#EFF6FF",
+                extraLightGreen: "#F0FDF4",
+                extraLightOrange: "#FFF7ED",
+                lightGrey: "#F9FAFB"
+            }
+        }
+    }
+};
+const vuetify = new Vuetify(options);
 
 
 class Installer implements ComponentInstaller
@@ -34,7 +78,7 @@ class Installer implements ComponentInstaller
 }
 
 
-const client = new ClientApp("#app", "shell")
+const client = new ClientApp("#app", "shell", { vuetify })
     .useInstaller(new Installer())
     .registerDialogService(new DefaultDialogService({
         accentColor: "#93C5FC",
