@@ -27,7 +27,9 @@ export class ManageUserViewModel extends PageViewModel
     private _lastName: string;
     private _email: string;
     private _dateOfBirth: string;
+
     private readonly _validator: Validator<this>;
+
 
     public get user(): User | null { return this._user; }
 
@@ -48,9 +50,11 @@ export class ManageUserViewModel extends PageViewModel
     public get hasErrors(): boolean { return !this._validate(); } // if has any error return true
     public get errors(): object { return this._validator.errors; } // which field is error
 
+
     public constructor(userService: UserService, navigationService: NavigationService, dialogService: DialogService)
     {
         super();
+
         given(userService, "userService").ensureHasValue().ensureIsObject();
         given(navigationService, "navigationService").ensureHasValue().ensureIsObject();
         given(dialogService, "dialogService").ensureHasValue().ensureIsObject();
@@ -68,6 +72,7 @@ export class ManageUserViewModel extends PageViewModel
         this._dateOfBirth = "";
         this._validator = this._createValidator();
     }
+
 
     @dedupe(Duration.fromSeconds(1))
     public async submit(): Promise<void>
@@ -119,30 +124,29 @@ export class ManageUserViewModel extends PageViewModel
         this._navigationService.navigate(Routes.userList);
     }
 
+
     protected override async onEnter(id?: string): Promise<void>
     {
         given(id as string, "id").ensureIsString();
 
-
         if (id && !id.isEmptyOrWhiteSpace())
         {
             this._isNew = false;
-            this._userService.fetchUser(id).then(t => 
-            {
-                this._user = t;
+            const user = await this._userService.fetchUser(id);
 
-                this._firstName = t.firstName;
-                this._lastName = t.lastName;
-                this._email = t.email || "";
-                this._dateOfBirth = t.dateOfBirth;
-            }
-            ).catch(e => console.log(e));
+            this._user = user;
+
+            this._firstName = user.firstName;
+            this._lastName = user.lastName;
+            this._email = user.email || "";
+            this._dateOfBirth = user.dateOfBirth;
         }
         else
         {
             this._isNew = true;
         }
     }
+
 
     private _validate(): boolean
     {
