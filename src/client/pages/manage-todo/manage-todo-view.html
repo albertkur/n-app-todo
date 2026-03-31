@@ -7,28 +7,27 @@
         <div class="field">
             <label class="label">Title</label>
             <div class="control">
-                <input class="input" type="text" v-model="title" placeholder="Title">
+                <v-text-field type="text" v-model="title" placeholder="Title" outlined :error-messages="errors.title">
+                </v-text-field>
             </div>
-            <p class="help is-danger">{{errors.title}}</p>
         </div>
 
         <div class="field">
             <label class="label">Description</label>
             <div class="control">
-                <textarea class="textarea" v-model="description" placeholder="description"></textarea>
+                <v-textarea v-model="description" placeholder="description" counter="500" outlined 
+                :error-messages="errors.description"></v-textarea>
             </div>
-            <p class="help is-danger">{{errors.description}}</p>
         </div>
 
         <div class="field is-grouped">
             <div class="control">
-                <button class="button is-link" v-on:click.prevent="save" v-bind:disabled="hasErrors">Save</button>
+                <v-btn color="primary" v-on:click.prevent="save" v-bind:disabled="hasErrors">Save</v-btn>
             </div>
             <div class="control">
-                <router-link class="button is-text" to="/todos">Cancel</router-link>
+                <v-btn plain to="/todos">Cancel</v-btn>
             </div>
         </div>
 
-        <p class="help is-danger" v-show="hasErrors">Please fix all errors</p>
     </form>
 </div>
