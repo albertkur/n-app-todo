@@ -10,12 +10,14 @@ export class MockUserProxy implements User
     private _dateOfBirth: string;
     private _isDeleted: boolean;
 
+
     public get id(): string { return this._id; }
     public get firstName(): string { return this._firstName; }
     public get lastName(): string { return this._lastName; }
     public get email(): string | null { return this._email; }
     public get dateOfBirth(): string { return this._dateOfBirth; }
     public get isDeleted(): boolean { return this._isDeleted; }
+
 
     public constructor(id: string, firstName: string, lastName: string, dateOfBirth: string, email: string | null)
     {
@@ -37,10 +39,11 @@ export class MockUserProxy implements User
         this._isDeleted = false;
     }
 
+
     public async update(firstName: string, lastName: string, email: string | null, dateOfBirth: string): Promise<void>
     {
         given(this, "this").ensure(t => !t.isDeleted, "user is already deleted");
-        
+
         given(firstName, "firstName").ensureHasValue().ensureIsString();
         given(lastName, "lastName").ensureHasValue().ensureIsString();
         given(email, "email").ensureIsString();

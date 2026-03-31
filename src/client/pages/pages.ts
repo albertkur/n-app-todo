@@ -9,10 +9,12 @@ import { ManageUserViewModel } from "./manage-user/manage-user-view-model";
 
 
 export const pages: Array<ClassHierarchy<PageViewModel>> = [
-    ListTodosViewModel,
-    ManageTodoViewModel,
     UserListViewModel,
     ManageUserViewModel,
-    ManagePaxViewModel,
-    PaxListViewModel
+    
+    ListTodosViewModel,
+    ManageTodoViewModel,
+    
+    PaxListViewModel,
+    ManagePaxViewModel
 ];
