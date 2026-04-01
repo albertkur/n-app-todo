@@ -220,6 +220,16 @@ const plugins = [
     new MiniCssExtractPlugin({}),
     new webpack.DefinePlugin({
         APP_CONFIG: JSON.stringify({})
+    }),
+    new webpack.ProvidePlugin({
+        $: "jquery",
+
+        ...Object.keys(require("tslib"))
+            .reduce<Record<string, Array<string>>>((acc, key) =>
+            {
+                acc[key] = ["tslib", key];
+                return acc;
+            }, {})
     })
 ];
 
