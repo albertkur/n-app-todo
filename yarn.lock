@@ -1414,7 +1414,6 @@ __metadata:
     "@nivinjoseph/n-ject": "npm:^2.0.5"
     "@nivinjoseph/n-util": "npm:^1.1.1"
     "@nivinjoseph/vue": "npm:2.6.14"
-    jquery: "npm:^3.6.0"
     reflect-metadata: "npm:^0.1.13"
     simplebar: "npm:^5.3.6"
     source-map-support: "npm:^0.5.21"
@@ -2203,15 +2202,6 @@ __metadata:
   dependencies:
     "@types/istanbul-lib-report": "npm:*"
   checksum: 10c0/1647fd402aced5b6edac87274af14ebd6b3a85447ef9ad11853a70fd92a98d35f81a5d3ea9fcb5dbb5834e800c6e35b64475e33fcae6bfa9acc70d61497c54ee
-  languageName: node
-  linkType: hard
-
-"@types/jquery@npm:^3.5.8":
-  version: 3.5.33
-  resolution: "@types/jquery@npm:3.5.33"
-  dependencies:
-    "@types/sizzle": "npm:*"
-  checksum: 10c0/d96c42762b7370ddf3b81cdad436a79d275e0ff09e2f4d7fbf2bbd8f97acef4110a11f1c3cb683195a1eba4fd9959e59d73f84d56ce2c010907a2bea696eb057
   languageName: node
   linkType: hard
 
@@ -7845,13 +7835,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery@npm:^3.6.0":
-  version: 3.7.1
-  resolution: "jquery@npm:3.7.1"
-  checksum: 10c0/808cfbfb758438560224bf26e17fcd5afc7419170230c810dd11f5c1792e2263e2970cca8d659eb84fcd9acc301edb6d310096e450277d54be4f57071b0c82d9
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -8944,7 +8927,6 @@ __metadata:
     "@nivinjoseph/n-web": "npm:^4.0.15"
     "@stylistic/eslint-plugin": "npm:^5.5.0"
     "@types/hash-sum": "npm:^1.0.2"
-    "@types/jquery": "npm:^3.5.8"
     "@types/loader-utils": "npm:^2.0.0"
     "@types/minimatch": "npm:^6.0.0"
     "@types/mocha": "npm:^8.2.2"
@@ -8977,7 +8959,6 @@ __metadata:
     imagemin-pngquant: "npm:^9.0.2"
     imagemin-svgo: "npm:^9.0.0"
     imagemin-webp: "npm:^6.0.0"
-    jquery: "npm:^3.6.0"
     loader-utils: "npm:^2.0.0"
     material-design-icons: "npm:^3.0.1"
     memfs: "npm:^3.4.4"
