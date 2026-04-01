@@ -3731,13 +3731,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bulma@npm:^0.9.3":
-  version: 0.9.4
-  resolution: "bulma@npm:0.9.4"
-  checksum: 10c0/ee4db3427f8ba24fa83d112dca87b99ba009ded9b159f72c4c35e04d1d25c636c3275db1268315427226cdd6c27c00e4147d4696b89cf1c4d57945f80dd16331
-  languageName: node
-  linkType: hard
-
 "bytes@npm:^3.1.2, bytes@npm:~3.1.2":
   version: 3.1.2
   resolution: "bytes@npm:3.1.2"
@@ -8961,7 +8954,6 @@ __metadata:
     axios: "npm:^0.26.0"
     babel-loader: "npm:^8.2.5"
     btoa: "npm:^1.2.1"
-    bulma: "npm:^0.9.3"
     clean-webpack-plugin: "npm:^4.0.0"
     compression-webpack-plugin: "npm:^10.0.0"
     concurrently: "npm:^9.2.1"
