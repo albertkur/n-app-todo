@@ -1,12 +1,14 @@
 <div class="list-todos-view">
-    <nav class="navbar" role="navigation" aria-label="main navigation">
+    <nav class="navbar mb-6" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
-            <router-link to="/manageTodo" class="button is-primary create-todo-button">Create Todo</router-link>
+            <v-btn color="primary" to="/manageTodo">Create Todo</v-btn>
         </div>
     </nav>
 
-    <div class="todo-container">
+    <v-row>
         <!-- using the custom component that we built -->
-        <todo v-for="todo in todos" v-bind:key="todo.id" v-bind:todo="todo"></todo>
-    </div>
+        <v-col v-for="todo in todos" :key="todo.id" class="py-6">
+            <todo v-bind:key="todo.id" v-bind:todo="todo"></todo>
+        </v-col>
+    </v-row>
 </div>

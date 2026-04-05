@@ -118,11 +118,11 @@
         "@nivinjoseph/n-validate": "^1.0.34",
         "@nivinjoseph/n-web": "^4.0.15",
         "axios": "^0.26.0",
-        "bulma": "^0.9.3",
         "jquery": "^3.6.0",
         "material-design-icons": "^3.0.1",
         "source-map-support": "^0.5.19",
-        "tslib": "^2.3.1"
+        "tslib": "^2.3.1",
+        "vuetify": "^2.6.14"
     },
     "browserslist": [
         "defaults"

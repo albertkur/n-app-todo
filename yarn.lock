@@ -1414,7 +1414,6 @@ __metadata:
     "@nivinjoseph/n-ject": "npm:^2.0.5"
     "@nivinjoseph/n-util": "npm:^1.1.1"
     "@nivinjoseph/vue": "npm:2.6.14"
-    jquery: "npm:^3.6.0"
     reflect-metadata: "npm:^0.1.13"
     simplebar: "npm:^5.3.6"
     source-map-support: "npm:^0.5.21"
@@ -2207,11 +2206,11 @@ __metadata:
   linkType: hard
 
 "@types/jquery@npm:^3.5.8":
-  version: 3.5.33
-  resolution: "@types/jquery@npm:3.5.33"
+  version: 3.5.34
+  resolution: "@types/jquery@npm:3.5.34"
   dependencies:
     "@types/sizzle": "npm:*"
-  checksum: 10c0/d96c42762b7370ddf3b81cdad436a79d275e0ff09e2f4d7fbf2bbd8f97acef4110a11f1c3cb683195a1eba4fd9959e59d73f84d56ce2c010907a2bea696eb057
+  checksum: 10c0/c85eec82531912cc497c34daad3509cf54875a0457c64d82b4fe17a4a27a313150c0882b7dd345b7e98c9116e0bae64c3942b7a76f6edcd664efa701cd1f2d81
   languageName: node
   linkType: hard
 
@@ -3728,13 +3727,6 @@ __metadata:
   version: 1.1.1
   resolution: "builtin-modules@npm:1.1.1"
   checksum: 10c0/58d72ea7f59db3c2ae854e1058d85b226f75ff7386d0f71d628e25a600383fc6652af218e20ba2361925c605a4144590ceb890dfdca298fdf8f3d040c0591a23
-  languageName: node
-  linkType: hard
-
-"bulma@npm:^0.9.3":
-  version: 0.9.4
-  resolution: "bulma@npm:0.9.4"
-  checksum: 10c0/ee4db3427f8ba24fa83d112dca87b99ba009ded9b159f72c4c35e04d1d25c636c3275db1268315427226cdd6c27c00e4147d4696b89cf1c4d57945f80dd16331
   languageName: node
   linkType: hard
 
@@ -8961,7 +8953,6 @@ __metadata:
     axios: "npm:^0.26.0"
     babel-loader: "npm:^8.2.5"
     btoa: "npm:^1.2.1"
-    bulma: "npm:^0.9.3"
     clean-webpack-plugin: "npm:^4.0.0"
     compression-webpack-plugin: "npm:^10.0.0"
     concurrently: "npm:^9.2.1"
@@ -9016,6 +9007,7 @@ __metadata:
     vue-hot-reload-api: "npm:^2.3.4"
     vue-loader: "npm:^15.9.8"
     vue-template-compiler: "npm:2.6.14"
+    vuetify: "npm:^2.6.14"
     webpack: "npm:^5.72.1"
     webpack-cli: "npm:^4.9.2"
     webpack-dev-middleware: "npm:^5.3.3"
@@ -12851,6 +12843,15 @@ __metadata:
   version: 1.9.1
   resolution: "vue-template-es2015-compiler@npm:1.9.1"
   checksum: 10c0/21d27d1c6afe10a47f17793e18afb7f321888d3ca728bfdb2a79ff49789ed9b40e98abcb68b5499f3da1bbb76a0f188b94aeb5ab0e879f46d6399ac5d4ae38c8
+  languageName: node
+  linkType: hard
+
+"vuetify@npm:^2.6.14":
+  version: 2.7.2
+  resolution: "vuetify@npm:2.7.2"
+  peerDependencies:
+    vue: ^2.6.4
+  checksum: 10c0/2c7df556c50d0ab74901d112b3944cf7022c97a58c423cc8572ece129bf81ac077652e0bd59aca29a0999d94d4aae1d06653cec6cc82612e81c48690d78fa60f
   languageName: node
   linkType: hard
 

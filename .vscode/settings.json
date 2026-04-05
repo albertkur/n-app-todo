@@ -39,7 +39,6 @@
     "cSpell.words": [
         "Booleancheckbox",
         "Todos",
-        "bulma",
         "endregion",
         "firstname",
         "fullheight",
@@ -62,6 +61,7 @@
         "waypoint",
         "waypoints",
         "xlink",
-        "xsmall"
+        "xsmall",
+        "vuetify"
     ],
 }
